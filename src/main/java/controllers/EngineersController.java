@@ -69,5 +69,41 @@ public class EngineersController {
             return null;
         }, new VelocityTemplateEngine());
 
+        //UPDATE GET
+        get("/engineers/:id/edit",(req, res) -> {
+            HashMap<String, Object> model = new HashMap();
+
+            List<Department> department = DBHelper.getAll(Department.class);
+            int id = Integer.parseInt(req.params(":id"));
+            Engineer engineer = DBHelper.find(id, Engineer.class);
+            model.put("engineer", engineer);
+            model.put("departments", department);
+            model.put("template", "templates/engineers/edit.vtl");
+            return new ModelAndView(model, "templates/layout.vtl");
+
+        }, new VelocityTemplateEngine());
+
+        //UPDATE POST
+        post("engineers/:id",(req, res) ->{
+            Map<String, Object> model = new HashMap<>();
+            String firstName = req.queryParams("first-name");
+            String lastName = req.queryParams("last-name");
+            int salary = Integer.parseInt(req.queryParams("salary"));
+            int departmentId = Integer.parseInt(req.queryParams("department"));
+            Department department = DBHelper.find(departmentId, Department.class);
+
+            int id = Integer.parseInt(req.params(":id"));
+            Engineer engineer = DBHelper.find(id, Engineer.class);
+            engineer.setFirstName(firstName);
+            engineer.setLastName(lastName);
+            engineer.setSalary(salary);
+            engineer.setDepartment(department);
+            DBHelper.update(engineer);
+
+            res.redirect("/engineers");
+            return null;
+        }, new VelocityTemplateEngine());
+
+
     }
 }
