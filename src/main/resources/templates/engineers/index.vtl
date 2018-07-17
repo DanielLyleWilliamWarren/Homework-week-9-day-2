@@ -20,6 +20,10 @@
             <td>$engineer.getLastName()</td>
             <th>$engineer.getSalary()</th>
             <td>$engineer.getDepartment().getTitle()</td>
+            <td><form method="post" action="/engineers/$engineer.getId()/delete">
+                <input type="submit" value="delete"/>
+            </form>
+            </td>
         </tr>
         #end
     </table>
