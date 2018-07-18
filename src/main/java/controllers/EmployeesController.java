@@ -18,9 +18,9 @@ public class EmployeesController {
 
         Seeds.seedData();
 
+        DepartmentsController departmentsController = new DepartmentsController();
         ManagersController managersController = new ManagersController();
         EngineersController engineersController = new EngineersController();
-
 
         get("/employees", (req, res) -> {
             Map<String, Object> model = new HashMap();
