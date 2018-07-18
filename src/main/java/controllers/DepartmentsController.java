@@ -1,7 +1,6 @@
 package controllers;
 
 import db.DBHelper;
-import db.Seeds;
 import models.Department;
 import models.Engineer;
 import spark.ModelAndView;
@@ -66,6 +65,33 @@ public class DepartmentsController {
             res.redirect("/departments");
             return null;
         }, new VelocityTemplateEngine());
+
+        //UPDATE GET
+        get("/departments/:id/edit",(req, res) -> {
+            HashMap<String, Object> model = new HashMap();
+
+            int id = Integer.parseInt(req.params(":id"));
+            Department department = DBHelper.find(id, Department.class);
+            model.put("department", department);
+            model.put("template", "templates/departments/edit.vtl");
+            return new ModelAndView(model, "templates/layout.vtl");
+
+        }, new VelocityTemplateEngine());
+
+        //UPDATE POST
+        post("departments/:id",(req, res) ->{
+            Map<String, Object> model = new HashMap<>();
+            String title = req.queryParams("title");
+
+            int id = Integer.parseInt(req.params(":id"));
+            Department department = DBHelper.find(id, Department.class);
+            department.setTitle(title);
+            DBHelper.update(department);
+
+            res.redirect("/departments");
+            return null;
+        }, new VelocityTemplateEngine());
+
 
 
     }
